@@ -1,5 +1,8 @@
 {
-  "solid":{
-    "title": "SOLID"
+  "SingleResponsibilityPrinciple": {
+    "title": "Single Responsibility Principle"
+  },
+  "OpenClosedPrinciple": {
+    "title": "Open Closed Principle"
   }
 }
