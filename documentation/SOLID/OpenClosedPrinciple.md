@@ -1,10 +1,11 @@
-The `Open Closed Principle` States that `Objects` are *Open for extension but closed for modification*
+The `Open Closed Principle` States that `Objects` are _Open for extension but closed for modification_
 
 What we mean for extension is really inheritance.
 
 We do not want to modify an Object as it may already been deployed and tested, and modification could cause unforseen breakages.
 
 Take a look at the following code:
+
 ```js
 let Color = Object.freeze({
   RED: "red",
@@ -45,7 +46,6 @@ let pf = new ProductFilter();
 for (let p of pf.filterByColor(products, Color.GREEN)) {
   console.log(p.name + ": is green");
 }
-
 ```
 
 We have a class called `Product` and another class called `ProductFilter`
@@ -55,7 +55,6 @@ in `ProductFilter` every time we want to add a new way to filter, we have to mod
 and this is not good.
 
 For us to create an expansion we will build what we call a `Specification` this sub class will be used to expand on an existing Class.
-
 
 Take a look at the new refactored code:
 
@@ -109,6 +108,16 @@ class SizeSpecification {
   }
 }
 
+class AndSpecification {
+  constructor(...specs) {
+    this.specs = specs;
+  }
+
+  isSatisfied(item) {
+    return this.specs.every((x) => x.isSatisfied(item));
+  }
+}
+
 class BetterFiler {
   constructor() {}
   filter(items, spec) {
@@ -130,6 +139,14 @@ for (let p of betterFilter.filter(
 )) {
   console.log(p.name);
 }
+
+console.log(`Large and green products:`);
+let spec = new AndSpecification(
+  new ColorSpecification(Color.green),
+  new SizeSpecification(Size.large)
+);
+for (let p of bf.filter(products, spec))
+  console.log(` * ${p.name} is large and green`);
 ```
 
 Now we can clearly see how expansion can make things a lot easier to use and to write cleaner code.
